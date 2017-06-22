@@ -1,28 +1,33 @@
+use std::io;
 use std::io::prelude::*;
 use std::net::{TcpListener, TcpStream};
-use std::thread;
-use std::time::Duration;
 
 /*
- * read reveived data and (with waiting ... and) echo it
+ * read reveived data and echo it
  */
-fn echo(stream: &mut TcpStream) {
+fn echo(stream: &mut TcpStream) -> Result<(), io::Error> {
     let mut buf = [0; 1024];
 
-    let _ = stream.read(&mut buf);
-    thread::sleep(Duration::from_secs(5)); // wait ...
-    let _ = stream.write_all(&buf);
+    stream.read(&mut buf)?;
+    stream.write_all(&buf)?;
+
+    return Ok(());
 }
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:9999").unwrap();
 
     loop {
-        for stream in listener.incoming() {
-            match stream {
-                Ok(mut stream) => { echo(&mut stream); }
-                Err(_) => { println!("listen error :("); }
+        match listener.accept() {
+            Ok((mut stream, _)) => {
+                loop {
+                    match echo(&mut stream) {
+                        Ok(_) => { continue; }
+                        Err(_) => { break; }
+                    }
+                }
             }
+            Err(_) => { println!("listen error :("); }
         }
     }
 }
