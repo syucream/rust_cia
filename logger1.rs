@@ -9,7 +9,7 @@ fn main() {
             thread::spawn(move || {
                 // ... do something ...
 
-                // NOTE cannot compile because here:
+                // XXX cannot compile because here:
                 logger.push(i);
             }
         ));

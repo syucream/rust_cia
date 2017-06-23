@@ -6,12 +6,12 @@ fn main() {
 
     let mut handlers = vec![];
     for i in 0..10 {
-        let logger_cloned = logger.clone();
+        let cloned_logger = logger.clone();
         handlers.push(
             thread::spawn(move || {
                 // ... do something ...
 
-                logger_cloned.lock().unwrap().push(i);
+                cloned_logger.lock().unwrap().push(i);
             }
         ));
     }
