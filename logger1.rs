@@ -1,4 +1,3 @@
-use std::io::prelude::*;
 use std::thread;
 
 fn main() {

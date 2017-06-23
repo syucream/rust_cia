@@ -1,9 +1,8 @@
-use std::io::prelude::*;
 use std::sync::{Arc, Mutex};
 use std::thread;
 
 fn main() {
-    let mut logger = Arc::new(Mutex::new(vec![]));
+    let logger = Arc::new(Mutex::new(vec![]));
 
     let mut handlers = vec![];
     for i in 0..10 {
@@ -21,9 +20,5 @@ fn main() {
         h.join().unwrap();
     }
 
-    // println!("{}", *logger.lock().unwrap());
-    for log in *logger.lock().unwrap() {
-        print!("{}, ", log);
-    }
-    println!("");
+    println!("{:?}", *logger.lock().unwrap());
 }
